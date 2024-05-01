@@ -17,7 +17,6 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -26,15 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ejerciciosavanzadosjetpackcompose.R
-import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Ejercicio1ViewModel
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Producto
 
 
-val listaProductos = listOf(
+val listaProductosS = listOf(
     Producto("Caja", 500.0, R.drawable.caja),
     Producto("Monitor", 200.0, R.drawable.monitor),
     Producto("Teclado", 50.0, R.drawable.teclado),
@@ -43,7 +39,7 @@ val listaProductos = listOf(
 )
 
 @Composable
-fun ComponenteProducto(
+fun ComponenteProductoS(
     producto: Producto,
     isSelected: Boolean,
     onCheckedChange: (Boolean) -> Unit
@@ -69,7 +65,7 @@ fun ComponenteProducto(
 
 
 @Composable
-fun ListaProductos(
+fun ListaProductosS(
     productos: List<Producto>,
     productosSeleccionados: List<Producto>,
     onProductoSeleccionadoChange: (Producto, Boolean) -> Unit
@@ -89,33 +85,22 @@ fun ListaProductos(
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
-    var seleccionarTodos by remember { mutableStateOf(false) }
+fun AppS(navController: NavController) {
+    var productosSeleccionados by remember { mutableStateOf(listOf<Producto>()) }
+    var contadorProductos by remember { mutableStateOf(0) }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Lista de Productos") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                },
                 actions = {
-                    CarritoCompraIcono(navController = navController, viewModel = viewModel)
-                    Row {
-                        Checkbox(
-                            checked = viewModel.seleccionarTodos.value,
-                            onCheckedChange = {isChecked ->
-                                viewModel.seleccionarTodos(isChecked)
-                                seleccionarTodos = isChecked
-                            })
-                    }
+                    CarritoCompraIconoS(contadorProductos,navController)
                 }
             )
         },
         bottomBar = {
             BottomAppBar {
-                Text("Costo Total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+                Text("Costo Total: $${productosSeleccionados.sumByDouble { it.precio }}")
             }
         }
     ) {
@@ -128,9 +113,15 @@ fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
             
             ListaProductos(
                 productos = listaProductos,
-                productosSeleccionados = viewModel.productosSeleccionados.value,
+                productosSeleccionados = productosSeleccionados,
                 onProductoSeleccionadoChange = { producto, seleccionado ->
-                    viewModel.onProductoSeleccionadoChange(producto,seleccionado)
+                    if (seleccionado) {
+                        productosSeleccionados = productosSeleccionados + producto
+                        contadorProductos++
+                    } else {
+                        productosSeleccionados = productosSeleccionados - producto
+                        contadorProductos--
+                    }
                 }
             )
         }
@@ -138,18 +129,18 @@ fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
 }
 
 @Composable
-fun CarritoCompraIcono(navController: NavController,viewModel: Ejercicio1ViewModel) {
+fun CarritoCompraIconoS(contadorProductos: Int, navController: NavController) {
 
     IconButton(onClick = { navController.navigate(Screens.Carrito.route) }) {
         Icon(Icons.Default.ShoppingCart,contentDescription = "Carrito de compra")
-        if (viewModel.contadorProductos.value > 0) {
-            Badge(valor = viewModel.contadorProductos.value)
+        if (contadorProductos > 0) {
+            BadgeS(valor = contadorProductos)
         }
     }
 }
 
 @Composable
-fun Badge(valor: Int) {
+fun BadgeS(valor: Int) {
     Surface(
         modifier = Modifier.padding(start = 30.dp, top = 20.dp)
     ) {

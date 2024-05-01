@@ -15,11 +15,11 @@ fun Menu(navController: NavController){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Button(onClick = {navController.navigate(route= Screens.Ejercicio1.route)}) {
+        Button(onClick = {navController.navigate(route= Screens.Login.route)}) {
             Text(text = "Ejercicio Presupuesto")
         }
-        Button(onClick = {navController.navigate(route= Screens.Ejercicio2.route)}) {
-            Text(text = "Ejercicio Agenda")
+        Button(onClick = {navController.navigate(route= Screens.Login.route)}) {
+            Text(text = "PantallaLogin")
         }
 
     }
