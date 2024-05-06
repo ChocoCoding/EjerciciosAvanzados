@@ -3,46 +3,43 @@ package com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.BottomAppBar
-import androidx.compose.material.BottomNavigation
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.ejerciciosavanzadosjetpackcompose.R
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Ejercicio1ViewModel
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Producto
+import java.text.DecimalFormat
 
 
 val listaProductos = listOf(
-    Producto("Caja", 500.0, R.drawable.caja),
-    Producto("Monitor", 200.0, R.drawable.monitor),
-    Producto("Teclado", 50.0, R.drawable.teclado),
-    Producto("Raton", 30.0, R.drawable.raton),
-    Producto("placa", 100.0, R.drawable.placa)
-)
+    Producto("Caja", 500.95, R.drawable.caja,"Cajas"),
+    Producto("Monitor", 200.95, R.drawable.monitor,"Periféricos"),
+    Producto("Teclado", 50.95, R.drawable.teclado,"Periféricos"),
+    Producto("Raton", 30.99, R.drawable.raton,"Periféricos"),
+    Producto("Tarjeta Gráfica",460.99,R.drawable.grafica,"Electrónica"),
+    Producto("Placa", 100.95, R.drawable.placa,"Electrónica"),
+    Producto("Ram",160.54,R.drawable.ram,"Electrónica"),
+    Producto("SSD",120.45,R.drawable.ssd,"Discos"),
+    Producto("M.2",183.45,R.drawable.m2,"Discos")
+    )
 
 @Composable
 fun ComponenteProducto(
@@ -50,6 +47,7 @@ fun ComponenteProducto(
     isSelected: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
+
     Row(
         modifier = Modifier
             .padding(8.dp)
@@ -65,7 +63,7 @@ fun ComponenteProducto(
             onCheckedChange = onCheckedChange,
             modifier = Modifier.padding(start = 16.dp)
         )
-        Text(text = producto.nombre, modifier = Modifier.padding(start = 16.dp))
+        Text("${producto.nombre}\nPrecio: ${producto.precio}€", modifier = Modifier.padding(start = 16.dp))
     }
 }
 
@@ -118,7 +116,7 @@ fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
         },
         bottomBar = {
             BottomAppBar {
-                Text("Costo Total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+                Text("Costo Total: ${viewModel.formato.format(viewModel.productosSeleccionados.value.sumByDouble { it.precio })}€")
             }
         }
     ) {
@@ -132,7 +130,7 @@ fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
                 .height(50.dp)
                 .background(Color.Yellow)) {
 
-                Text(text = "Coste total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+                Text(text = "Coste total: ${viewModel.formato.format(viewModel.productosSeleccionados.value.sumByDouble { it.precio })}€")
 
                 CarritoCompraIcono(navController = navController, viewModel = viewModel)
             }

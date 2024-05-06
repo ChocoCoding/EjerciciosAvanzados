@@ -3,6 +3,8 @@ package com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Button
-import androidx.compose.material.Checkbox
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -26,12 +28,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -50,8 +49,6 @@ fun AppCarrito(navController: NavController,
     fun confirmarCompra()= viewModel.confirmarCompra();
 
     fun realizarCompra() {
-        // Aquí podrías agregar la lógica para realizar la compra
-        // Puedes reiniciar los productos seleccionados y mostrar un mensaje de confirmación
         viewModel.resetearProductosSeleccionados()
         Toast.makeText(context, "Compra realizada con éxito", Toast.LENGTH_SHORT).show()
         navController.popBackStack()
@@ -74,7 +71,9 @@ fun AppCarrito(navController: NavController,
         },
         bottomBar = {
             BottomAppBar {
-                Text("Costo Total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+                Text("Costo Total: ${viewModel.formato.format(viewModel.productosSeleccionados.value.sumByDouble { it.precio })}€")
+
+
             }
         }
     ) {
@@ -88,18 +87,29 @@ fun AppCarrito(navController: NavController,
                 productosSeleccionados = viewModel.productosSeleccionados.value,
                 viewModel = viewModel
             )
-            
-            Button(onClick = {confirmarCompra()}) {
-                Text("Confirmar Compra")
+
+        }
+        Row (Modifier
+            .fillMaxSize()
+            .height(50.dp)
+            .padding(bottom = 80.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.Bottom){
+            Button(onClick = {confirmarCompra()},
+                Modifier.padding(end = 20.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green))
+            {
+                Text("Comprar")
             }
 
             if(viewModel.showDialog.value){
                 AlertDialog(
+                    modifier = Modifier.border(2.dp, Color.Black),
                     onDismissRequest = {viewModel.showDialog.value = false},
                     title = { Text(text = "Confirmar Compra")},
-                    text = { Text("¿Deseas realizar la compra?\nCoste total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+                    text = { Text("¿Deseas realizar la compra?\nCoste total: ${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}€")
 
-                           },
+                    },
                     confirmButton = {
                         Button(onClick = {
                             realizarCompra()
@@ -114,7 +124,6 @@ fun AppCarrito(navController: NavController,
                         }
                     })
             }
-
         }
 
     }
@@ -139,7 +148,7 @@ fun ComponenteProducto2(
                 .padding(start = 16.dp, end = 16.dp))
 
         Row {
-            Text(text = producto.nombre)
+            Text("${producto.nombre}\nPrecio: ${producto.precio}")
             Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = {viewModel.eliminarProducto(producto = producto)}) {
                 Icon(Icons.Default.Delete,contentDescription = "Eliminar")

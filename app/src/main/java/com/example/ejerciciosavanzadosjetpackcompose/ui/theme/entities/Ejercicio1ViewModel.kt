@@ -1,12 +1,11 @@
 package com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities
 
-import androidx.compose.runtime.getValue
+
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.listaProductos
+import java.text.DecimalFormat
 
 class Ejercicio1ViewModel:ViewModel() {
     var productosSeleccionados = mutableStateOf(listOf<Producto>());
@@ -14,6 +13,7 @@ class Ejercicio1ViewModel:ViewModel() {
     var seleccionarTodos = mutableStateOf(false)
     var showDialog =  mutableStateOf(false)
 
+    val formato = DecimalFormat("#.##")
     fun confirmarCompra() {
         showDialog.value = true
     }
