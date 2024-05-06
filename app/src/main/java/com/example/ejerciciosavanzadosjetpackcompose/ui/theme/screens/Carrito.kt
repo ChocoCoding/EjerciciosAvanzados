@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.BottomAppBar
+import androidx.compose.material.Button
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -24,7 +26,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -38,6 +45,17 @@ fun AppCarrito(navController: NavController,
                viewModel: Ejercicio1ViewModel){
     var context = LocalContext.current
     val productosSeleccionados = viewModel.productosSeleccionados.value
+    var showDialog = viewModel.showDialog
+
+    fun confirmarCompra()= viewModel.confirmarCompra();
+
+    fun realizarCompra() {
+        // Aquí podrías agregar la lógica para realizar la compra
+        // Puedes reiniciar los productos seleccionados y mostrar un mensaje de confirmación
+        viewModel.resetearProductosSeleccionados()
+        Toast.makeText(context, "Compra realizada con éxito", Toast.LENGTH_SHORT).show()
+        navController.popBackStack()
+    }
 
     Scaffold(
         topBar = {
@@ -70,6 +88,33 @@ fun AppCarrito(navController: NavController,
                 productosSeleccionados = viewModel.productosSeleccionados.value,
                 viewModel = viewModel
             )
+            
+            Button(onClick = {confirmarCompra()}) {
+                Text("Confirmar Compra")
+            }
+
+            if(viewModel.showDialog.value){
+                AlertDialog(
+                    onDismissRequest = {viewModel.showDialog.value = false},
+                    title = { Text(text = "Confirmar Compra")},
+                    text = { Text("¿Deseas realizar la compra?\nCoste total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+
+                           },
+                    confirmButton = {
+                        Button(onClick = {
+                            realizarCompra()
+                            viewModel.showDialog.value = false
+                        }) {
+                            Text(text = "Si")
+                        }
+                    },
+                    dismissButton = {
+                        Button(onClick = {viewModel.showDialog.value = false}) {
+                            Text(text = "Cancelar")
+                        }
+                    })
+            }
+
         }
 
     }

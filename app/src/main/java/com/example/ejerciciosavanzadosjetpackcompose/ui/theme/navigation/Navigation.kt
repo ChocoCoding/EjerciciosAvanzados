@@ -9,10 +9,10 @@ import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Ejercicio
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Menu
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Producto
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.App
+import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.AppAgenda
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.AppCarrito
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.AppLogin
 
-import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.PantallaPrueba2
 
 import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens.Screens
 
@@ -29,7 +29,7 @@ fun Navigation(){
             App(navController = navController,viewModel = viewModel) //Nombre de la funcion a ejecutar
         }
         composable(route= Screens.Ejercicio2.route){
-            PantallaPrueba2()//Nombre de la funcion a ejecutar
+            AppAgenda()//Nombre de la funcion a ejecutar
         }
         composable(route = Screens.Carrito.route){
             AppCarrito(navController = navController,

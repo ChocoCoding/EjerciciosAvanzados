@@ -2,6 +2,7 @@ package com.example.ejerciciosavanzadosjetpackcompose.ui.theme.screens
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -104,10 +106,11 @@ fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
                     CarritoCompraIcono(navController = navController, viewModel = viewModel)
                     Row {
                         Checkbox(
-                            checked = viewModel.seleccionarTodos.value,
+                            checked = seleccionarTodos,
                             onCheckedChange = {isChecked ->
-                                viewModel.seleccionarTodos(isChecked)
                                 seleccionarTodos = isChecked
+                                viewModel.seleccionarTodos(isChecked)
+
                             })
                     }
                 }
@@ -124,8 +127,16 @@ fun App(navController: NavController,viewModel: Ejercicio1ViewModel) {
                 .fillMaxSize()
                 .padding(bottom = 56.dp) // dejar espacio para el BottomAppBar
         ) {
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+                .background(Color.Yellow)) {
 
-            
+                Text(text = "Coste total: $${viewModel.productosSeleccionados.value.sumByDouble { it.precio }}")
+
+                CarritoCompraIcono(navController = navController, viewModel = viewModel)
+            }
+
             ListaProductos(
                 productos = listaProductos,
                 productosSeleccionados = viewModel.productosSeleccionados.value,

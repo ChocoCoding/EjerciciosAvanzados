@@ -12,7 +12,11 @@ class Ejercicio1ViewModel:ViewModel() {
     var productosSeleccionados = mutableStateOf(listOf<Producto>());
     var contadorProductos = mutableIntStateOf(0);
     var seleccionarTodos = mutableStateOf(false)
+    var showDialog =  mutableStateOf(false)
 
+    fun confirmarCompra() {
+        showDialog.value = true
+    }
 
     fun onProductoSeleccionadoChange(producto: Producto,seleccionado: Boolean){
       val productoSeleccionadoActual = productosSeleccionados.value.toMutableList();
@@ -37,7 +41,7 @@ class Ejercicio1ViewModel:ViewModel() {
 
     fun seleccionarTodos(seleccionar:Boolean){
         productosSeleccionados.value = if (seleccionar){
-            listaProductos
+            listaProductos.toList()
         }else{
             emptyList()
         }
@@ -46,6 +50,11 @@ class Ejercicio1ViewModel:ViewModel() {
         }else{
             0
         }
+    }
+
+    fun resetearProductosSeleccionados() {
+        productosSeleccionados.value = emptyList()
+        contadorProductos.value = 0
     }
 
 
