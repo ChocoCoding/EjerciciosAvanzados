@@ -34,12 +34,19 @@ import com.example.ejerciciosavanzadosjetpackcompose.ui.theme.entities.Producto
 
 
 val listaProductosS = listOf(
-    Producto("Caja", 500.0, R.drawable.caja),
-    Producto("Monitor", 200.0, R.drawable.monitor),
-    Producto("Teclado", 50.0, R.drawable.teclado),
-    Producto("Raton", 30.0, R.drawable.raton),
-    Producto("placa", 100.0, R.drawable.placa)
-)
+    Producto("Caja", 500.0, R.drawable.caja,"Cajas"),
+    Producto("Monitor", 200.0, R.drawable.monitor,"Electronica"),
+    Producto("Teclado", 50.0, R.drawable.teclado,"Perifericos"),
+    Producto("Raton", 30.0, R.drawable.raton,"Perifericos"),
+    Producto("Placa", 100.0, R.drawable.placa,"Electronica"),
+    Producto("Grafica", 30.0, R.drawable.grafica,"Electronica"),
+    Producto("Microfono", 30.0, R.drawable.microfono,"Perifericos"),
+    Producto("Ram", 30.0, R.drawable.ram,"Electronica"),
+    Producto("SSD", 30.0, R.drawable.ssd,"Discos"),
+    Producto("M2", 30.0, R.drawable.m2,"Discos")
+
+
+    )
 
 @Composable
 fun ComponenteProductoS(
